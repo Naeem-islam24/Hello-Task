@@ -27,6 +27,7 @@ import AdminLayout from '../pages/Dashboard/AdminLayout'
 import ContactMessages from '../pages/ContactMessages'
 import MyOrders from '../pages/MyOrders'
 import TrackOrder from '../pages/TrackOrder'
+import ReviewForm from '../pages/reviewsection/ReviewForm'
 
 const router = createBrowserRouter([
   {
@@ -40,8 +41,7 @@ const router = createBrowserRouter([
       { path: '/provider-form', element: <ServiceProviderForm /> },
       { path: '/registration', element: <Register /> },
       { path: '/contact', element: <Contact /> },
-      { path: '/aboutus', element: <Contact /> },
-
+      { path: '/review-form', element: <ReviewForm /> },      
       {
         path: '/service/:id',
         element: (
@@ -132,7 +132,7 @@ const router = createBrowserRouter([
         ),
       },
 
-      // 🔥 Admin Only Route
+      //Admin Only Route
       {
         path: "/dashboard",
         element: (

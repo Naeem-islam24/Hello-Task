@@ -9,7 +9,6 @@ import 'swiper/css/navigation'
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import Slide from './Slide'
-
 import bgimg1 from '../assets/images/Carosul01.jpg'
 import bgimg2 from '../assets/images/Carosul02.jpg'
 import bgimg3 from '../assets/images/Carosul03.jpg'

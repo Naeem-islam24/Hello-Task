@@ -3,7 +3,7 @@ import { ShieldCheck, Headphones, Hand, HandHeart } from "lucide-react";
 
 const WhyChooseUs = () => {
   return (
-    <div className="w-full mt-4 bg-gray-100 py-10 px-6 flex flex-col items-center">
+    <div className="w-full mt-4 bg-slate-50 py-10 px-6 flex flex-col items-center">
       {/* Heading Section */}
       <div className="text-center mb-12">
         <p className="text-sm tracking-widest text-gray-400 font-medium">

@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import logo from "../assets/images/Logo-Gpt.png";
 import { AuthContext } from "../providers/AuthProvider";
@@ -8,9 +7,8 @@ const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
 
   const navLinkClass = ({ isActive }) =>
-    `px-4 py-2 rounded-lg font-medium transition ${isActive
-      ? "bg-primary text-white"
-      : "text-gray-700 hover:bg-base-300"
+    `px-4 py-2 rounded-lg font-medium transition ${
+      isActive ? "bg-primary text-white" : "text-gray-700 hover:bg-base-300"
     }`;
 
   return (
@@ -26,18 +24,9 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <div className="hidden lg:flex items-center gap-2">
-
-        <NavLink to="/" className={navLinkClass}>
-          Home
-        </NavLink>
-
-        <NavLink to="/all-services" className={navLinkClass}>
-          All Services
-        </NavLink>
-
-        <NavLink to="/contact" className={navLinkClass}>
-          Contact
-        </NavLink>
+        <NavLink to="/" className={navLinkClass}>Home</NavLink>
+        <NavLink to="/all-services" className={navLinkClass}>All Services</NavLink>
+        <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
 
         {!user && (
           <NavLink
@@ -47,19 +36,11 @@ const Navbar = () => {
             Register
           </NavLink>
         )}
-
-        {user && (
-          <NavLink to="/track-orders" className={navLinkClass}>
-            Track Order
-          </NavLink>
-        )}
-
       </div>
 
-      {/* User Profile */}
+      {/* User Profile Dropdown */}
       {user && (
         <div className="dropdown dropdown-end ml-3">
-
           <div
             tabIndex={0}
             role="button"
@@ -79,7 +60,6 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 w-64 p-2 shadow-xl bg-base-100 rounded-xl border"
           >
-
             {/* User Info */}
             <div className="px-3 py-2 border-b mb-2">
               <p className="font-semibold text-gray-800">
@@ -90,6 +70,7 @@ const Navbar = () => {
               </p>
             </div>
 
+            {/* Dropdown Links */}
             <li>
               <Link
                 to="/servicers-approval"
@@ -109,18 +90,26 @@ const Navbar = () => {
             </li>
 
             <li>
-              {user && (
-                <NavLink to="/track-orders" className={navLinkClass}>
-                🧾 Track Order
-                </NavLink>
-              )}
+              <NavLink
+                to="/track-orders"
+                className="flex items-center gap-3 hover:bg-green-50 hover:text-green-600 rounded-lg"
+              >
+                🚚 Track Order
+              </NavLink>
             </li>
 
+            <li>
+              <NavLink
+                to="/review-form"
+                className="flex items-center gap-3 hover:bg-yellow-50 hover:text-yellow-600 rounded-lg"
+              >
+                ⭐ Write Review
+              </NavLink>
+            </li>
 
             {user?.role === "admin" && (
               <>
                 <div className="divider my-1"></div>
-
                 <li>
                   <Link
                     to="/dashboard"
@@ -133,7 +122,6 @@ const Navbar = () => {
             )}
 
             <div className="divider my-1"></div>
-
             <li>
               <button
                 onClick={logOut}
@@ -142,37 +130,30 @@ const Navbar = () => {
                 🚪 Logout
               </button>
             </li>
-
           </ul>
         </div>
       )}
 
       {/* Mobile Menu */}
       <div className="dropdown lg:hidden ml-2">
-        <label tabIndex={0} className="btn btn-ghost">
-          ☰
-        </label>
-
+        <label tabIndex={0} className="btn btn-ghost">☰</label>
         <ul
           tabIndex={0}
           className="menu menu-sm dropdown-content right-0 mt-3 p-2 shadow bg-base-100 rounded-box w-52"
         >
-          <li>
-            <NavLink to="/">Home</NavLink>
-          </li>
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/all-services">All Services</NavLink></li>
+          <li><NavLink to="/contact">Contact</NavLink></li>
+          {!user && <li><NavLink to="/registration">Register</NavLink></li>}
 
-          <li>
-            <NavLink to="/all-services">All Services</NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/contact">Contact</NavLink>
-          </li>
-
-          {!user && (
-            <li>
-              <NavLink to="/registration">Register</NavLink>
-            </li>
+          {/* Mobile User Dropdown Links */}
+          {user && (
+            <>
+              <li><Link to="/servicers-approval">📄 My Applications</Link></li>
+              <li><Link to="/my-orders">🧾 My Orders</Link></li>
+              <li><Link to="/track-orders">🚚 Track Order</Link></li>
+              <li><Link to="/review-form">⭐ Write Review</Link></li>
+            </>
           )}
         </ul>
       </div>

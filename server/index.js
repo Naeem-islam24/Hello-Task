@@ -37,7 +37,7 @@ async function run() {
     const providerCollection = db.collection('serviceProviders')
     const bookingData = db.collection('bookingsData')
     const usersCollection = db.collection('users')
-
+    const reviewCollection = db.collection("reviews");    // Review Collection
 
 
 
@@ -244,6 +244,38 @@ async function run() {
       } catch (error) {
         res.status(500).send({ error: "Failed to fetch orders" });
       }
+    });
+
+
+
+
+    // Add Review (No login required)
+    app.post('/reviews', async (req, res) => {
+      try {
+        const review = {
+          name: req.body.name,
+          image: req.body.image,
+          comment: req.body.comment,
+          rating: req.body.rating || 5,
+          createdAt: new Date()
+        };
+
+        const result = await reviewCollection.insertOne(review);
+        res.send(result);
+      } catch (error) {
+        res.status(500).send({ message: "Failed to add review" });
+      }
+    });
+
+
+    // Get All Reviews
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewCollection
+        .find()
+        .sort({ createdAt: -1 })
+        .toArray();
+
+      res.send(result);
     });
 
 
