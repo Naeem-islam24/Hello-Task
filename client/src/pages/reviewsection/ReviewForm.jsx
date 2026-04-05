@@ -33,7 +33,7 @@ const ReviewForm = ({ refreshReviews }) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto my-16 bg-white p-6 rounded-2xl shadow">
+    <div className="max-w-xl mx-auto my-16 bg-orange-200 p-6 rounded-2xl shadow">
       <h2 className="text-2xl font-bold mb-4">Leave a Review</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">

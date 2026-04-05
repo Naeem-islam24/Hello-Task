@@ -37,7 +37,7 @@ async function run() {
     const providerCollection = db.collection('serviceProviders')
     const bookingData = db.collection('bookingsData')
     const usersCollection = db.collection('users')
-    const reviewCollection = db.collection("reviews");    // Review Collection
+    const reviewCollection = db.collection("reviews");
 
 
 
@@ -65,12 +65,6 @@ async function run() {
 
 
 
-    //Get all services data from DB
-    app.get('/all-services', async (req, res) => {
-      const result = await serviceCollection.find().toArray()
-      res.send(result)
-    })
-
 
     //Get all services data from DB
     app.get('/all-services/:email', verifyToken, verifyAdmin(usersCollection), async (req, res) => {
@@ -83,15 +77,75 @@ async function run() {
     }
     );
 
+    // get all services for Home Page
+    app.get('/home-services', async (req, res) => {
+      try {
+        const services = await serviceCollection.find({}).toArray();
+        res.send({ services });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server Error' });
+      }
+    });
 
 
+
+
+
+
+    //Get all services data from DB for Public Route
+    app.get('/all-services', async (req, res) => {
+      try {
+        const { search = '', category = '', sort = '', page = 1, limit = 8 } = req.query;
+
+        let query = {};
+
+        // 🔍 Search
+        if (search) {
+          query.title = { $regex: search, $options: 'i' };
+        }
+
+        // 📂 Category filter
+        if (category) {
+          query.category = category;
+        }
+
+        let cursor = serviceCollection.find(query);
+
+        // 🔄 Sort
+        if (sort === 'asc') {
+          cursor = cursor.sort({ _id: 1 });
+        } else if (sort === 'dsc') {
+          cursor = cursor.sort({ _id: -1 });
+        }
+
+        // 📄 Pagination
+        const pageNumber = parseInt(page);
+        const limitNumber = parseInt(limit);
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const services = await cursor.skip(skip).limit(limitNumber).toArray();
+        const total = await serviceCollection.countDocuments(query);
+
+        res.send({
+          services,
+          total,
+          currentPage: pageNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        });
+
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server Error' });
+      }
+    });
+
+    //Service list which is added by admin 
     app.get('/my-services', verifyToken, verifyAdmin(usersCollection), async (req, res) => {
       const result = await serviceCollection.find({ "buyer.email": req.user.email }).toArray();
       res.send(result);
     }
     );
-
-
 
     //Delete a Service from DB
     app.delete("/service/:id", async (req, res) => {
@@ -136,14 +190,14 @@ async function run() {
     });
 
 
-    // Save provider form data - only logged in user
+    // Save provider form data only logged in user
     app.post('/provider-formdata', verifyToken, async (req, res) => {
       try {
         const formData = {
           ...req.body,
-          email: req.user.email,   //logged-in user email force
-          status: "pending",       //default status
-          createdAt: new Date(),   //application time
+          email: req.user.email,
+          status: "pending",
+          createdAt: new Date(),
           updatedAt: null
         };
 
@@ -249,7 +303,7 @@ async function run() {
 
 
 
-    // Add Review (No login required)
+    // Add Review by user (No login required)
     app.post('/reviews', async (req, res) => {
       try {
         const review = {
@@ -268,7 +322,7 @@ async function run() {
     });
 
 
-    // Get All Reviews
+    // Get All Reviews for UI
     app.get('/reviews', async (req, res) => {
       const result = await reviewCollection
         .find()
@@ -277,10 +331,6 @@ async function run() {
 
       res.send(result);
     });
-
-
-
-
 
 
 
